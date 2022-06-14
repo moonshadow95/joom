@@ -11,14 +11,6 @@ html(lang="en")
 body
     header
         h1 Zoom
-    main
-        form#nickname
-            input(type="text" placeholder='write your nickname' required)
-            button Save
-        ul
-        form#message
-            input(type="text" placeholder='write a message' required)
-            button Send
 
-
+    script(src="/socket.io/socket.io.js")
     script(src='/public/js/app.js')

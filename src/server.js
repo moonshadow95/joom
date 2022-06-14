@@ -1,6 +1,6 @@
-import WebSocket from 'ws'
 import http from 'http'
 import express from 'express'
+import {Server} from 'socket.io'
 
 const port = 3000
 const app = express()
@@ -12,10 +12,11 @@ app.use('/public', express.static(__dirname + '/public'))
 app.get('/', (_, res) => res.render('home'))
 app.get('/*', (_, res) => res.redirect('/'))
 
-const handleListening = () => console.log(`✅ Listening on http://localhost:${port}`)
+const httpServer = http.createServer(app)
+const wsServer = new Server(httpServer);
 
-const server = http.createServer(app)
-
+wsServer.on('connection', (socket) => console.log(socket))
+/*
 const wss = new WebSocket.Server({server})
 
 function onSocketClose() {
@@ -41,5 +42,8 @@ wss.on('connection', (socket) => {
     }
   })
 })
+*/
 
-server.listen(3000, handleListening)
+const handleListening = () => console.log(`✅ Listening on http://localhost:${port}`)
+
+httpServer.listen(3000, handleListening)
