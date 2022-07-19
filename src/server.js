@@ -16,13 +16,14 @@ const httpServer = http.createServer(app)
 const wsServer = new Server(httpServer);
 
 wsServer.on('connection', (socket) => {
-  socket.on('room', (roomName, done) => {
-    console.log(roomName)
-    setTimeout(() => {
-      done('hi?')
-      // backend 가 실행하는 것이 아니라 frontend 에서 실행한다.
-      // backend 에서 실행한다면 보안문제가 생긴다. 실행 버튼을 눌러주는 것이라고 생각하면 된다.
-    }, 1000)
+  socket.onAny((event) => console.log(`Socket Event: ${event}`))
+  socket.on('room', (roomName, showRoom) => {
+    console.log(socket.id)
+    console.log(socket.rooms)
+    // 배열을 전달하면 여러개 방에 동시에 입장 가능하다.
+    socket.join(roomName)
+    console.log(socket.rooms)
+    showRoom()
   })
 })
 /*
