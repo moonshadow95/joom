@@ -18,12 +18,9 @@ const wsServer = new Server(httpServer);
 wsServer.on('connection', (socket) => {
   socket.onAny((event) => console.log(`Socket Event: ${event}`))
   socket.on('room', (roomName, showRoom) => {
-    console.log(socket.id)
-    console.log(socket.rooms)
-    // 배열을 전달하면 여러개 방에 동시에 입장 가능하다.
     socket.join(roomName)
-    console.log(socket.rooms)
     showRoom()
+    socket.to(roomName).emit('welcome')
   })
 })
 /*
