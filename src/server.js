@@ -22,6 +22,16 @@ wsServer.on('connection', (socket) => {
     showRoom()
     socket.to(roomName).emit('welcome')
   })
+  socket.on('disconnecting', () => {
+    socket.rooms.forEach((room) => {
+      socket.to(room).emit('bye')
+    })
+  })
+  socket.on('new_message', (message, room, done) => {
+    socket.to(room).emit('new_message', message)
+    done()
+    // 프론트의 addMessage 를 실행
+  })
 })
 /*
 const wss = new WebSocket.Server({server})
