@@ -16,22 +16,24 @@ const httpServer = http.createServer(app)
 const wsServer = new Server(httpServer);
 
 wsServer.on('connection', (socket) => {
+  socket['nickname'] = 'Anonymous'
   socket.onAny((event) => console.log(`Socket Event: ${event}`))
   socket.on('room', (roomName, showRoom) => {
     socket.join(roomName)
     showRoom()
-    socket.to(roomName).emit('welcome')
+    socket.to(roomName).emit('welcome', socket.nickname)
   })
   socket.on('disconnecting', () => {
     socket.rooms.forEach((room) => {
-      socket.to(room).emit('bye')
+      socket.to(room).emit('bye', socket.nickname)
     })
   })
   socket.on('new_message', (message, room, done) => {
-    socket.to(room).emit('new_message', message)
+    socket.to(room).emit('new_message', `${socket.nickname}: ${message}`)
     done()
     // 프론트의 addMessage 를 실행
   })
+  socket.on('nickname', nickname => (socket['nickname'] = nickname))
 })
 /*
 const wss = new WebSocket.Server({server})
