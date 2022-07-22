@@ -25,6 +25,11 @@ function handleMessageSubmit(event) {
   input.value = ''
 }
 
+function changeTitle(newCount) {
+  const h3 = room.querySelector('h3')
+  h3.innerText = `Room: ${roomName}(${newCount})`
+}
+
 function addMessage(message) {
   const ul = room.querySelector('ul')
   const li = document.createElement('li')
@@ -35,8 +40,6 @@ function addMessage(message) {
 function showRoom() {
   room.hidden = false
   roomNameForm.hidden = true
-  const h3 = room.querySelector('h3')
-  h3.innerText = `Room: ${roomName}`
   const messageForm = room.querySelector('#message')
   messageForm.addEventListener('submit', handleMessageSubmit)
 }
@@ -52,12 +55,14 @@ function handleRoomSubmit(event) {
 roomNameForm.addEventListener('submit', handleRoomSubmit)
 nameForm.addEventListener('submit', handleNickNameSubmit)
 
-socket.on("welcome", (user) => {
+socket.on("welcome", (user, newCount) => {
   addMessage(`${user} joined`)
+  changeTitle(newCount)
 })
 
-socket.on('bye', (left) => {
+socket.on('bye', (left, newCount) => {
   addMessage(`${left} left`)
+  changeTitle(newCount)
 })
 
 socket.on('new_message', addMessage)

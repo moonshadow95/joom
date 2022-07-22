@@ -32,6 +32,10 @@ function publicRooms() {
   return publicRooms
 }
 
+function countRoom(roomName) {
+  return wsServer.sockets.adapter.rooms.get(roomName)?.size
+}
+
 wsServer.on('connection', (socket) => {
   socket['nickname'] = 'Anonymous'
   socket.onAny((event) => {
@@ -42,13 +46,14 @@ wsServer.on('connection', (socket) => {
   socket.on('room', (roomName, showRoom) => {
     socket.join(roomName)
     showRoom()
-    socket.to(roomName).emit('welcome', socket.nickname)
+    socket.to(roomName).emit('welcome', socket.nickname, countRoom(roomName))
     // 모든 socket 에 메세지를 보내는 방법
     wsServer.sockets.emit('room_change', publicRooms())
   })
   socket.on('disconnecting', () => {
     socket.rooms.forEach((room) => {
-      socket.to(room).emit('bye', socket.nickname)
+      // 방을 떠나기 전에 실행되어 나가는 사람이 포함되므로 -1 을 해준다.
+      socket.to(room).emit('bye', socket.nickname, countRoom(room) - 1)
     })
   })
   socket.on('disconnect', () => {
