@@ -17,7 +17,10 @@ const wsServer = new Server(httpServer);
 
 wsServer.on('connection', (socket) => {
   socket['nickname'] = 'Anonymous'
-  socket.onAny((event) => console.log(`Socket Event: ${event}`))
+  socket.onAny((event) => {
+    console.log(wsServer.sockets.adapter)
+    console.log(`Socket Event: ${event}`)
+  })
   socket.on('room', (roomName, showRoom) => {
     socket.join(roomName)
     showRoom()
