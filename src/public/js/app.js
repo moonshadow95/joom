@@ -17,9 +17,13 @@ function showRoomList(rooms) {
   rooms.forEach(room => {
     const li = document.createElement('li')
     const button = document.createElement('button')
+    const i = document.createElement('i')
     button.innerText = room.roomName
+    i.innerText = `(${room.roomCount})`
     ul.appendChild(li)
     li.appendChild(button)
+    li.appendChild(i)
+    button.style.marginRight = '12px'
     button.addEventListener('click', (event) => {
       socket.emit('room', event.currentTarget.innerText, showRoom)
       roomName = event.currentTarget.innerText

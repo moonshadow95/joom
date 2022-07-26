@@ -55,7 +55,7 @@ wsServer.on('connection', (socket) => {
   wsServer.emit('room_change', publicRooms())
   socket.on('room', (roomName, showRoom) => {
     socket.join(roomName)
-    showRoom(roomName, countUsers((roomName)))
+    showRoom(roomName, countUsers(roomName))
     socket.to(roomName).emit('welcome', socket.nickname, roomName, countUsers(roomName))
     // 모든 socket 에 메세지를 보내는 방법
     wsServer.sockets.emit('room_change', publicRooms())
