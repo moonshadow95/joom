@@ -33,16 +33,16 @@ function publicRooms() {
           {sids, rooms}
       }
   } = wsServer
-  const publicRooms = []
+  const publicRoomList = []
   rooms.forEach((_, key) => {
     if (!sids.get(key)) {
-      publicRooms.push(key)
+      publicRoomList.push({roomName: key, roomCount: countUsers(key)})
     }
   })
-  return publicRooms
+  return publicRoomList
 }
 
-function countRoom(roomName) {
+function countUsers(roomName) {
   return wsServer.sockets.adapter.rooms.get(roomName)?.size
 }
 
@@ -55,15 +55,15 @@ wsServer.on('connection', (socket) => {
   wsServer.emit('room_change', publicRooms())
   socket.on('room', (roomName, showRoom) => {
     socket.join(roomName)
-    showRoom()
-    socket.to(roomName).emit('welcome', socket.nickname, countRoom(roomName))
+    showRoom(roomName, countUsers((roomName)))
+    socket.to(roomName).emit('welcome', socket.nickname, roomName, countUsers(roomName))
     // 모든 socket 에 메세지를 보내는 방법
     wsServer.sockets.emit('room_change', publicRooms())
   })
   socket.on('disconnecting', () => {
     socket.rooms.forEach((room) => {
       // 방을 떠나기 전에 실행되어 나가는 사람이 포함되므로 -1 을 해준다.
-      socket.to(room).emit('bye', socket.nickname, countRoom(room) - 1)
+      socket.to(room).emit('bye', socket.nickname, room, countUsers(room) - 1)
     })
   })
   socket.on('disconnect', () => {
@@ -71,8 +71,9 @@ wsServer.on('connection', (socket) => {
   })
   socket.on('new_message', (message, room, done) => {
     socket.to(room).emit('new_message', `${socket.nickname}: ${message}`)
-    done()
+    console.log(message, room)
     // 프론트의 addMessage 를 실행
+    done()
   })
   socket.on('nickname', nickname => (socket['nickname'] = nickname))
 })

@@ -7,17 +7,23 @@ const room = document.querySelector('#room')
 let roomName
 room.hidden = true
 
-function showRooms(rooms) {
-  const roomList = welcome.querySelector('ul')
-  roomList.innerHTML = ''
+function showRoomList(rooms) {
+  const ul = welcome.querySelector('ul')
+  ul.innerHTML = ''
   if (rooms.length === 0) {
-    roomList.innerHTML = ''
+    ul.innerHTML = ''
     return
   }
   rooms.forEach(room => {
     const li = document.createElement('li')
-    li.innerText = room
-    roomList.appendChild(li)
+    const button = document.createElement('button')
+    button.innerText = room.roomName
+    ul.appendChild(li)
+    li.appendChild(button)
+    button.addEventListener('click', (event) => {
+      socket.emit('room', event.currentTarget.innerText, showRoom)
+      roomName = event.currentTarget.innerText
+    })
   })
 }
 
@@ -39,7 +45,7 @@ function handleMessageSubmit(event) {
   input.value = ''
 }
 
-function changeTitle(newCount) {
+function changeTitle(roomName, newCount) {
   const h3 = room.querySelector('h3')
   h3.innerText = `Room: ${roomName}(${newCount})`
 }
@@ -51,11 +57,12 @@ function addMessage(message) {
   ul.appendChild(li)
 }
 
-function showRoom() {
+function showRoom(name, count) {
   room.hidden = false
   roomNameForm.hidden = true
   const messageForm = room.querySelector('#message')
   messageForm.addEventListener('submit', handleMessageSubmit)
+  changeTitle(name, count)
 }
 
 function handleRoomSubmit(event) {
@@ -64,23 +71,22 @@ function handleRoomSubmit(event) {
   socket.emit('room', input.value, showRoom)
   roomName = input.value
   input.value = ''
-  changeTitle(1)
 }
 
 roomNameForm.addEventListener('submit', handleRoomSubmit)
 nameForm.addEventListener('submit', handleNickNameSubmit)
 
-socket.on("welcome", (user, newCount) => {
+socket.on("welcome", (user, roomName, newCount) => {
   addMessage(`${user} joined`)
-  changeTitle(newCount)
+  changeTitle(roomName, newCount)
 })
 
-socket.on('bye', (user, newCount) => {
+socket.on('bye', (user, roomName, newCount) => {
   addMessage(`${user} left`)
-  changeTitle(newCount)
+  changeTitle(roomName, newCount)
 })
 
 socket.on('new_message', addMessage)
 // same as - socket.on('new_message', (message)=>addMessage(message))
 
-socket.on('room_change', (rooms) => showRooms(rooms))
+socket.on('room_change', (rooms) => showRoomList(rooms))
