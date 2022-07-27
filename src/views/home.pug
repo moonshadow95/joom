@@ -11,10 +11,10 @@ body
         h1 Zoom
     main
         div#myStream
-            video#myFace(autoplay playsinline width="400" height="400")
+            video#myFace(autoplay playsinline width="screen" height="400")
             div
-                button#mute Unmute
-                button#camera Camera On
+                button#mute Mute
+                button#camera Camera Off
+                select#cameras
     script(src="/socket.io/socket.io.js")
     script(src='/public/js/app.js')
-
