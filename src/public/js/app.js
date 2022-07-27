@@ -9,9 +9,10 @@ room.hidden = true
 
 function showRoomList(rooms) {
   const ul = welcome.querySelector('ul')
+
   ul.innerHTML = ''
   if (rooms.length === 0) {
-    ul.innerHTML = ''
+    ul.innerHTML = "There's no room"
     return
   }
   rooms.forEach(room => {
