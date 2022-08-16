@@ -10,6 +10,7 @@ let myStream;
 let muted = false;
 let cameraOff = false;
 let myPeerConnection;
+let myDataChannel;
 
 call.hidden = true;
 
@@ -127,6 +128,10 @@ welcomeForm.addEventListener('submit', handleWelcomeSubmit);
 // Socket Code
 
 socket.on('welcome', async () => {
+  // runs on normal tab
+  myDataChannel = myPeerConnection.createDataChannel('chat');
+  myDataChannel.addEventListener('message', (event) => console.log(event.data));
+  console.log('made data channel');
   const offer = await myPeerConnection.createOffer();
   myPeerConnection.setLocalDescription(offer);
   console.log('sent the offer');
@@ -134,16 +139,23 @@ socket.on('welcome', async () => {
 });
 
 socket.on('offer', async (offer) => {
+  // runs on secret tab
+  myPeerConnection.addEventListener('datachannel', (event) => {
+    myDataChannel = event.channel;
+    myDataChannel.addEventListener('message', (event) =>
+      console.log(event.data)
+    );
+  });
   console.log('recieved the offer');
   myPeerConnection.setRemoteDescription(offer);
   const answer = await myPeerConnection.createAnswer();
-  myPeerConnection.setLocalDescription(answer);
   socket.emit('answer', answer, roomName);
+  myPeerConnection.setLocalDescription(answer);
 });
 
 socket.on('answer', (answer) => {
-  console.log('recieved the answer');
   myPeerConnection.setRemoteDescription(answer);
+  console.log('recieved the answer');
 });
 
 socket.on('ice', (ice) => {
