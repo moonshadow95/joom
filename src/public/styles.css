@@ -1,0 +1,43 @@
+* {
+  box-sizing: border-box;
+}
+
+body {
+  color: #fff;
+  background: #000;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+form {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 1em;
+}
+
+input {
+  width: 100%;
+  margin: 0;
+}
+
+button {
+  padding: 0.5rem 1rem;
+  margin: 0;
+}
+
+div#myStream {
+  position: fixed;
+  top: 0;
+  right: 0;
+}
+
+video#peersStream {
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 100%;
+  z-index: -1;
+  border-right: 2px solid;
+}
