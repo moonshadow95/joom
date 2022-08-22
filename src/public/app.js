@@ -9,7 +9,7 @@ const camerasSelect = document.getElementById('cameras');
 const call = document.getElementById('call');
 const chat = document.getElementById('chat');
 const chatForm = document.getElementById('chatForm');
-const chatInput = chatForm.querySelector('textarea');
+const chatInput = chatForm.querySelector('input');
 
 let myStream;
 let muted = false;
@@ -138,9 +138,18 @@ async function handleWelcomeSubmit(event) {
   input.value = '';
 }
 
+function makeMessgae(data) {
+  const ul = chat.querySelector('ul');
+  const li = document.createElement('li');
+  li.innerText = data;
+  ul.appendChild(li);
+  ul.scrollTop = ul.scrollHeight;
+}
+
 function handleChatSubmit(e) {
   e.preventDefault();
-  console.log(chatInput.value);
+  makeMessgae(chatInput.value);
+  myDataChannel.send(chatInput.value);
   chatInput.value = '';
 }
 
@@ -152,7 +161,7 @@ chatForm.addEventListener('submit', handleChatSubmit);
 socket.on('welcome', async () => {
   // runs on normal tab
   myDataChannel = myPeerConnection.createDataChannel('chat');
-  myDataChannel.addEventListener('message', (event) => console.log(event.data));
+  myDataChannel.addEventListener('message', (event) => makeMessgae(event.data));
   console.log('made data channel');
   const offer = await myPeerConnection.createOffer();
   myPeerConnection.setLocalDescription(offer);
@@ -165,7 +174,7 @@ socket.on('offer', async (offer) => {
   myPeerConnection.addEventListener('datachannel', (event) => {
     myDataChannel = event.channel;
     myDataChannel.addEventListener('message', (event) =>
-      console.log(event.data)
+      makeMessgae(event.data)
     );
   });
   console.log('recieved the offer');

@@ -119,8 +119,7 @@ form#chatForm {
   max-height: 200px;
 }
 
-#chat textarea {
-  resize: none;
+#chat input {
   width: 100%;
   margin-bottom: 0;
   max-width: 100%;
