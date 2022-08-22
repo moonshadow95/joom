@@ -18,7 +18,7 @@ body
         div#call
             div#streamGrid
                 div#myStream
-                    video#myFace(autoplay playsinline width="screen" min-height="400")
+                    video#myFace(autoplay playsinline width="screen")
                     div 
                         div#controls
                             button#mute 
@@ -28,7 +28,15 @@ body
                                 img(src="https://img.icons8.com/external-regular-kawalan-studio/24/ffffff/external-camera-off-user-interface-regular-kawalan-studio.png")
                                 //- "https://img.icons8.com/material-outlined/24/ffffff/camera--v1.png"
                         select#cameras
-                video#peersStream(autoplay playsinline width="screen" min-height="400")
+                div#peersStream
+                    video#peersFace(autoplay playsinline width="screen")
+        div#chat
+            ul
+            div
+                form#chatForm
+                    textarea(type="text" rows=3)
+                    button#chatSub Send
+
 
     script(src="/socket.io/socket.io.js")
     script(src='/public/app.js')

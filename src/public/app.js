@@ -7,6 +7,9 @@ const cameraBtn = document.getElementById('camera');
 const cameraIcon = cameraBtn.querySelector('img');
 const camerasSelect = document.getElementById('cameras');
 const call = document.getElementById('call');
+const chat = document.getElementById('chat');
+const chatForm = document.getElementById('chatForm');
+const chatInput = chatForm.querySelector('textarea');
 
 let myStream;
 let muted = false;
@@ -15,6 +18,7 @@ let myPeerConnection;
 let myDataChannel;
 
 call.hidden = true;
+chat.hidden = true;
 
 async function getCamera() {
   try {
@@ -120,6 +124,7 @@ let roomName;
 async function initCall() {
   welcome.hidden = true;
   call.hidden = false;
+  chat.hidden = false;
   await getMedia();
   makeConnection();
 }
@@ -133,7 +138,14 @@ async function handleWelcomeSubmit(event) {
   input.value = '';
 }
 
+function handleChatSubmit(e) {
+  e.preventDefault();
+  console.log(chatInput.value);
+  chatInput.value = '';
+}
+
 welcomeForm.addEventListener('submit', handleWelcomeSubmit);
+chatForm.addEventListener('submit', handleChatSubmit);
 
 // Socket Code
 
@@ -202,6 +214,6 @@ function handleIce(data) {
 }
 
 function handleAddStream(data) {
-  const peersStream = document.getElementById('peersStream');
-  peersStream.srcObject = data.stream;
+  const peersFace = document.getElementById('peersFace');
+  peersFace.srcObject = data.stream;
 }

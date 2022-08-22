@@ -6,6 +6,11 @@ main {
   padding: 0;
 }
 
+header {
+  padding: 0;
+  margin: 0;
+}
+
 body {
   color: #fff;
   background: #000;
@@ -33,6 +38,7 @@ button {
 
 div#call {
   padding: 0 2em;
+  max-height: 50%;
 }
 
 div#streamGrid {
@@ -41,32 +47,31 @@ div#streamGrid {
 }
 
 div#myStream {
-  width: 50%;
+  width: 40%;
   position: relative;
 }
 
 video#myFace,
-video#peersStream {
+video#peersFace {
+  width: 100%;
+  height: 100%;
   border-radius: 1em;
   box-shadow: 0px 3px 10px -2px #f4f4f4;
   object-fit: cover;
+  max-height: 350px;
 }
 
-video#myFace {
+div#peersStream {
   width: 100%;
-  height: 100%;
-}
-video#peersStream {
-  width: 50%;
 }
 
 div#controls {
   position: absolute;
-  bottom: 0;
+  bottom: 0.4em;
   left: 50%;
   transform: translateX(-50%);
   display: flex;
-  gap: 4px;
+  gap: 6px;
   justify-content: center;
   align-items: center;
   width: 100%;
@@ -86,4 +91,43 @@ button#camera {
   border: none;
 }
 select#cameras {
+  margin: 1em 0;
+  max-width: 100%;
+}
+
+div#chat {
+  margin: 2em;
+  margin-top: 5em;
+  box-shadow: 0px 3px 10px -2px #f4f4f4;
+  border-radius: 1em;
+  padding: 1em;
+  padding-bottom: 0;
+}
+
+form#chatForm {
+  box-shadow: none;
+  border: none;
+  width: 100%;
+  padding: 1em;
+  max-width: 100%;
+}
+
+#chat ul {
+  list-style-type: none;
+  padding-left: 1em;
+  overflow-y: scroll;
+  max-height: 200px;
+}
+
+#chat textarea {
+  resize: none;
+  width: 100%;
+  margin-bottom: 0;
+  max-width: 100%;
+}
+
+div#chat div {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-end;
 }
