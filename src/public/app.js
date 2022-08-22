@@ -2,7 +2,9 @@ const socket = io();
 
 const myFace = document.getElementById('myFace');
 const muteBtn = document.getElementById('mute');
+const muteIcon = muteBtn.querySelector('img');
 const cameraBtn = document.getElementById('camera');
+const cameraIcon = cameraBtn.querySelector('img');
 const camerasSelect = document.getElementById('cameras');
 const call = document.getElementById('call');
 
@@ -64,10 +66,14 @@ function handleMuteClick() {
     .forEach((track) => (track.enabled = !track.enabled));
   if (muted === true) {
     muted = false;
-    muteBtn.innerText = 'Mute';
+    muteIcon.src =
+      'https://img.icons8.com/windows/32/ffffff/block-microphone.png';
+    muteBtn.style.backgroundColor = '#fc1c1c';
   } else {
     muted = true;
-    muteBtn.innerText = 'Unmute';
+    muteIcon.src =
+      'https://img.icons8.com/windows/32/ffffff/microphone--v1.png';
+    muteBtn.style.backgroundColor = '#118bee';
   }
 }
 
@@ -77,10 +83,14 @@ function handleCameraClick() {
     .forEach((track) => (track.enabled = !track.enabled));
   if (cameraOff === true) {
     cameraOff = false;
-    cameraBtn.innerText = 'Camera Off';
+    cameraIcon.src =
+      'https://img.icons8.com/external-regular-kawalan-studio/24/ffffff/external-camera-off-user-interface-regular-kawalan-studio.png';
+    cameraBtn.style.backgroundColor = '#fc1c1c';
   } else {
     cameraOff = true;
-    cameraBtn.innerText = 'Camera On';
+    cameraIcon.src =
+      'https://img.icons8.com/material-outlined/24/ffffff/camera--v1.png';
+    cameraBtn.style.backgroundColor = '#118bee';
   }
 }
 

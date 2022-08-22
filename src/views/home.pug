@@ -16,13 +16,19 @@ body
                 input(placeholder='room name' required type='text')
                 button Enter room
         div#call
-            div#myStream
-                video#myFace(autoplay playsinline width="screen" height="400")
-                div
-                    button#mute Mute
-                    button#camera Camera Off
-                    select#cameras
-            video#peersStream(autoplay playsinline width="screen" height="400")
+            div#streamGrid
+                div#myStream
+                    video#myFace(autoplay playsinline width="screen" min-height="400")
+                    div 
+                        div#controls
+                            button#mute 
+                                img(src="https://img.icons8.com/windows/32/ffffff/block-microphone.png")
+                                //- "https://img.icons8.com/windows/32/ffffff/microphone--v1.png"
+                            button#camera 
+                                img(src="https://img.icons8.com/external-regular-kawalan-studio/24/ffffff/external-camera-off-user-interface-regular-kawalan-studio.png")
+                                //- "https://img.icons8.com/material-outlined/24/ffffff/camera--v1.png"
+                        select#cameras
+                video#peersStream(autoplay playsinline width="screen" min-height="400")
 
     script(src="/socket.io/socket.io.js")
     script(src='/public/app.js')
