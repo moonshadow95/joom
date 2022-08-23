@@ -121,6 +121,27 @@ const welcomeForm = welcome.querySelector('form');
 
 let roomName;
 
+function showRoomList(rooms) {
+  const ul = welcome.querySelector('ul');
+  ul.innerHTML = '';
+  if (rooms.length === 0) {
+    ul.innerHTML = "There's no room";
+    return;
+  }
+  rooms.forEach((room) => {
+    const li = document.createElement('li');
+    const button = document.createElement('button');
+    button.innerText = room;
+    ul.appendChild(li);
+    li.appendChild(button);
+    button.style.marginRight = '12px';
+    button.addEventListener('click', (event) => {
+      socket.emit('room', event.currentTarget.innerText, showRoom);
+      roomName = event.currentTarget.innerText;
+    });
+  });
+}
+
 async function initCall() {
   welcome.hidden = true;
   call.hidden = false;
@@ -193,6 +214,8 @@ socket.on('ice', (ice) => {
   console.log('recived candidate');
   myPeerConnection.addIceCandidate(ice);
 });
+
+socket.on('room_change', (rooms) => showRoomList(rooms));
 
 // RTC Code
 

@@ -15,10 +15,27 @@ app.get('/*', (_, res) => res.redirect('/'));
 const httpServer = http.createServer(app);
 const wsServer = new Server(httpServer);
 
+function publicRooms() {
+  const {
+    sockets: {
+      adapter: { sids, rooms },
+    },
+  } = wsServer;
+  const publicRoomList = [];
+  rooms.forEach((_, key) => {
+    if (!sids.get(key)) {
+      publicRoomList.push(key);
+    }
+  });
+  return publicRoomList;
+}
+
 wsServer.on('connection', (socket) => {
+  socket['nickname'] = 'Anonymous';
+  wsServer.emit('room_change', publicRooms());
   socket.on('join_room', (roomName) => {
     socket.join(roomName);
-    socket.to(roomName).emit('welcome');
+    socket.to(roomName).emit('welcome', socket.nickname, roomName);
   });
   socket.on('offer', (offer, roomName) => {
     socket.to(roomName).emit('offer', offer);
