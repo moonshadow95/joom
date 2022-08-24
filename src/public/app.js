@@ -176,7 +176,7 @@ function makeMessage(data) {
 function handleChatSubmit(e) {
   e.preventDefault();
   try {
-    makeMessage(chatInput.value);
+    makeMessage(`You: ${chatInput.value}`);
     myDataChannel.send(`${nickname.innerText}: ${chatInput.value}`);
   } catch (error) {
     console.log(error)
