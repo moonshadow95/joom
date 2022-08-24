@@ -137,12 +137,7 @@ function showRoomList(rooms) {
     ul.appendChild(li);
     li.appendChild(button);
     button.style.marginRight = '12px';
-    button.addEventListener('click', (event) => {
-      socket.emit('join_room', event.currentTarget.innerText, (event) => {
-        console.log(event)
-      });
-      roomName = event.currentTarget.innerText;
-    });
+    button.addEventListener('click', handleRoomSubmit);
   });
 }
 
@@ -156,13 +151,20 @@ async function initCall() {
 
 async function handleRoomSubmit(event) {
   event.preventDefault();
-  const input = roomNameForm.querySelector('input');
   const h3 = call.querySelector('h3')
-  h3.innerText = `Room : '${input.value}'`
-  await initCall();
-  socket.emit('join_room', input.value);
-  roomName = input.value;
-  input.value = '';
+  if (event.target === roomNameForm) {
+    const input = roomNameForm.querySelector('input');
+    h3.innerText = `Room : '${input.value}'`
+    await initCall();
+    socket.emit('join_room', input.value);
+    roomName = input.value;
+    input.value = '';
+  } else {
+    h3.innerText = `Room : '${event.target.innerText}'`;
+    await initCall();
+    socket.emit('join_room', event.target.innerText);
+    roomName = event.target.innerText;
+  }
 }
 
 function makeMessage(data) {
