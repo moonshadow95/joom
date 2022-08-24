@@ -7,6 +7,8 @@ const cameraBtn = document.getElementById('camera');
 const cameraIcon = cameraBtn.querySelector('img');
 const camerasSelect = document.getElementById('cameras');
 const call = document.getElementById('call');
+const nicknameForm = document.querySelector('#nickname form');
+const nickname = document.querySelector('#nickname h3');
 const chat = document.getElementById('chat');
 const chatForm = document.getElementById('chatForm');
 const chatInput = chatForm.querySelector('input');
@@ -48,7 +50,7 @@ async function getMedia(deviceId) {
   };
   const cameraConstrains = {
     audio: true,
-    video: { deviceId: { exact: deviceId } },
+    video: {deviceId: {exact: deviceId}},
   };
   try {
     myStream = await navigator.mediaDevices.getUserMedia(
@@ -114,10 +116,10 @@ muteBtn.addEventListener('click', handleMuteClick);
 cameraBtn.addEventListener('click', handleCameraClick);
 camerasSelect.addEventListener('input', handleCameraChange);
 
-// Welcome Form (join a room)
+// Welcome (join a room, save a nickname)
 
 const welcome = document.getElementById('welcome');
-const welcomeForm = welcome.querySelector('form');
+const roomNameForm = welcome.querySelector('form');
 
 let roomName;
 
@@ -136,7 +138,9 @@ function showRoomList(rooms) {
     li.appendChild(button);
     button.style.marginRight = '12px';
     button.addEventListener('click', (event) => {
-      socket.emit('room', event.currentTarget.innerText, showRoom);
+      socket.emit('join_room', event.currentTarget.innerText, (event) => {
+        console.log(event)
+      });
       roomName = event.currentTarget.innerText;
     });
   });
@@ -150,16 +154,18 @@ async function initCall() {
   makeConnection();
 }
 
-async function handleWelcomeSubmit(event) {
+async function handleRoomSubmit(event) {
   event.preventDefault();
-  const input = welcomeForm.querySelector('input');
+  const input = roomNameForm.querySelector('input');
+  const h3 = call.querySelector('h3')
+  h3.innerText = `Room : '${input.value}'`
   await initCall();
   socket.emit('join_room', input.value);
   roomName = input.value;
   input.value = '';
 }
 
-function makeMessgae(data) {
+function makeMessage(data) {
   const ul = chat.querySelector('ul');
   const li = document.createElement('li');
   li.innerText = data;
@@ -169,20 +175,36 @@ function makeMessgae(data) {
 
 function handleChatSubmit(e) {
   e.preventDefault();
-  makeMessgae(chatInput.value);
-  myDataChannel.send(chatInput.value);
+  try {
+    makeMessage(chatInput.value);
+    myDataChannel.send(`${nickname.innerText}: ${chatInput.value}`);
+  } catch (error) {
+    console.log(error)
+  }
   chatInput.value = '';
 }
 
-welcomeForm.addEventListener('submit', handleWelcomeSubmit);
+function changeNickname(name) {
+  nickname.innerText = name
+}
+
+async function handleNickSubmit(e) {
+  e.preventDefault()
+  const input = nicknameForm.querySelector('input')
+  socket.emit('nickname', input.value)
+  changeNickname(input.value)
+}
+
+roomNameForm.addEventListener('submit', handleRoomSubmit);
 chatForm.addEventListener('submit', handleChatSubmit);
+nicknameForm.addEventListener('submit', handleNickSubmit)
 
 // Socket Code
 
 socket.on('welcome', async () => {
   // runs on normal tab
   myDataChannel = myPeerConnection.createDataChannel('chat');
-  myDataChannel.addEventListener('message', (event) => makeMessgae(event.data));
+  myDataChannel.addEventListener('message', (event) => makeMessage(event.data));
   console.log('made data channel');
   const offer = await myPeerConnection.createOffer();
   myPeerConnection.setLocalDescription(offer);
@@ -195,10 +217,10 @@ socket.on('offer', async (offer) => {
   myPeerConnection.addEventListener('datachannel', (event) => {
     myDataChannel = event.channel;
     myDataChannel.addEventListener('message', (event) =>
-      makeMessgae(event.data)
+      makeMessage(event.data)
     );
   });
-  console.log('recieved the offer');
+  console.log('received the offer');
   myPeerConnection.setRemoteDescription(offer);
   const answer = await myPeerConnection.createAnswer();
   socket.emit('answer', answer, roomName);
@@ -207,11 +229,11 @@ socket.on('offer', async (offer) => {
 
 socket.on('answer', (answer) => {
   myPeerConnection.setRemoteDescription(answer);
-  console.log('recieved the answer');
+  console.log('received the answer');
 });
 
 socket.on('ice', (ice) => {
-  console.log('recived candidate');
+  console.log('received candidate');
   myPeerConnection.addIceCandidate(ice);
 });
 

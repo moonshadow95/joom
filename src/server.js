@@ -1,6 +1,6 @@
 import http from 'http';
 import express from 'express';
-import { Server } from 'socket.io';
+import {Server} from 'socket.io';
 
 const port = 3000;
 const app = express();
@@ -18,7 +18,7 @@ const wsServer = new Server(httpServer);
 function publicRooms() {
   const {
     sockets: {
-      adapter: { sids, rooms },
+      adapter: {sids, rooms},
     },
   } = wsServer;
   const publicRoomList = [];
@@ -33,6 +33,12 @@ function publicRooms() {
 wsServer.on('connection', (socket) => {
   socket['nickname'] = 'Anonymous';
   wsServer.emit('room_change', publicRooms());
+  socket.on('room', (roomName, showRoom) => {
+    socket.join(roomName)
+    showRoom(roomName)
+    socket.to(roomName).emit('welcome', socket.nickname, roomName)
+    wsServer.sockets.emit('room_change', publicRooms())
+  })
   socket.on('join_room', (roomName) => {
     socket.join(roomName);
     socket.to(roomName).emit('welcome', socket.nickname, roomName);
@@ -46,6 +52,7 @@ wsServer.on('connection', (socket) => {
   socket.on('ice', (ice, roomName) => {
     socket.to(roomName).emit('ice', ice);
   });
+  socket.on('nickname', nickname => (socket['nickname'] = nickname))
 });
 
 const handleListening = () =>

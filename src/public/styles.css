@@ -1,132 +1,153 @@
 * {
-  box-sizing: border-box;
+    box-sizing: border-box;
 }
 
 main {
-  padding: 0;
+    padding: 0;
 }
 
 header {
-  padding: 0;
-  margin: 0;
+    padding: 0;
+    margin: 0;
 }
 
 body {
-  color: #fff;
-  background: #000;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
+    color: #fff;
+    background: #000;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 }
 
 form {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-end;
-  gap: 1em;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 1em;
 }
 
 input {
-  width: 100%;
-  margin: 0;
+    width: 100%;
+    margin: 0;
 }
 
 button {
-  padding: 0.5rem 1rem;
-  margin: 0;
+    padding: 0.5rem 1rem;
+    margin: 0;
+}
+
+div#nickname {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 1em;
+}
+
+div#nickname form {
+    max-width: 285px;
 }
 
 div#call {
-  padding: 0 2em;
-  max-height: 50%;
+    padding: 0 2em;
+    max-height: 50%;
 }
 
 div#streamGrid {
-  display: flex;
-  gap: 1em;
+    display: flex;
+    gap: 1em;
 }
 
 div#myStream {
-  width: 40%;
-  position: relative;
+    width: 40%;
+    position: relative;
+}
+
+div#myStream h4 {
+    position: absolute;
+    top: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 1;
 }
 
 video#myFace,
 video#peersFace {
-  width: 100%;
-  height: 100%;
-  border-radius: 1em;
-  box-shadow: 0px 3px 10px -2px #f4f4f4;
-  object-fit: cover;
-  max-height: 350px;
+    width: 100%;
+    height: 100%;
+    border-radius: 1em;
+    box-shadow: 0px 3px 10px -2px #f4f4f4;
+    object-fit: cover;
+    max-height: 350px;
 }
 
 div#peersStream {
-  width: 100%;
+    width: 100%;
 }
 
 div#controls {
-  position: absolute;
-  bottom: 0.4em;
-  left: 50%;
-  transform: translateX(-50%);
-  display: flex;
-  gap: 6px;
-  justify-content: center;
-  align-items: center;
-  width: 100%;
-  flex-wrap: wrap;
+    position: absolute;
+    bottom: 0.4em;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    gap: 6px;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    flex-wrap: wrap;
 }
 
 button#mute,
 button#camera {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 50px;
-  height: 50px;
-  border-radius: 100%;
-  padding: 0;
-  background-color: #fc1c1c;
-  border: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 50px;
+    height: 50px;
+    border-radius: 100%;
+    padding: 0;
+    background-color: #ff0000;
+    border: none;
 }
+
 select#cameras {
-  margin: 1em 0;
-  max-width: 100%;
+    margin: 1em 0;
+    max-width: 100%;
 }
 
 div#chat {
-  margin: 2em;
-  margin-top: 5em;
-  box-shadow: 0px 3px 10px -2px #f4f4f4;
-  border-radius: 1em;
-  padding: 1em;
-  padding-bottom: 0;
+    margin: 2em;
+    margin-top: 5em;
+    box-shadow: 0px 3px 10px -2px #f4f4f4;
+    border-radius: 1em;
+    padding: 1em;
+    padding-bottom: 0;
 }
 
 form#chatForm {
-  box-shadow: none;
-  border: none;
-  width: 100%;
-  padding: 1em;
-  max-width: 100%;
+    box-shadow: none;
+    border: none;
+    width: 100%;
+    padding: 1em;
+    max-width: 100%;
 }
 
 #chat ul {
-  list-style-type: none;
-  padding-left: 1em;
-  overflow-y: scroll;
-  max-height: 200px;
+    list-style-type: none;
+    padding-left: 1em;
+    overflow-y: scroll;
+    max-height: 200px;
 }
 
 #chat input {
-  width: 100%;
-  margin-bottom: 0;
-  max-width: 100%;
+    width: 100%;
+    margin-bottom: 0;
+    max-width: 100%;
 }
 
 div#chat div {
-  display: flex;
-  flex-direction: row;
-  justify-content: flex-end;
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-end;
 }
