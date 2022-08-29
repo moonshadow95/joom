@@ -50,7 +50,7 @@ async function getMedia(deviceId) {
   };
   const cameraConstrains = {
     audio: true,
-    video: {deviceId: {exact: deviceId}},
+    video: { deviceId: { exact: deviceId } },
   };
   try {
     myStream = await navigator.mediaDevices.getUserMedia(
@@ -136,7 +136,6 @@ function showRoomList(rooms) {
     button.innerText = room;
     ul.appendChild(li);
     li.appendChild(button);
-    button.style.marginRight = '12px';
     button.addEventListener('click', handleRoomSubmit);
   });
 }
@@ -151,10 +150,10 @@ async function initCall() {
 
 async function handleRoomSubmit(event) {
   event.preventDefault();
-  const h3 = call.querySelector('h3')
+  const h3 = call.querySelector('h3');
   if (event.target === roomNameForm) {
     const input = roomNameForm.querySelector('input');
-    h3.innerText = `Room : '${input.value}'`
+    h3.innerText = `Room : '${input.value}'`;
     await initCall();
     socket.emit('join_room', input.value);
     roomName = input.value;
@@ -181,25 +180,25 @@ function handleChatSubmit(e) {
     makeMessage(`You: ${chatInput.value}`);
     myDataChannel.send(`${nickname.innerText}: ${chatInput.value}`);
   } catch (error) {
-    console.log(error)
+    console.log(error);
   }
   chatInput.value = '';
 }
 
 function changeNickname(name) {
-  nickname.innerText = name
+  nickname.innerText = name;
 }
 
 async function handleNickSubmit(e) {
-  e.preventDefault()
-  const input = nicknameForm.querySelector('input')
-  socket.emit('nickname', input.value)
-  changeNickname(input.value)
+  e.preventDefault();
+  const input = nicknameForm.querySelector('input');
+  socket.emit('nickname', input.value);
+  changeNickname(input.value);
 }
 
 roomNameForm.addEventListener('submit', handleRoomSubmit);
 chatForm.addEventListener('submit', handleChatSubmit);
-nicknameForm.addEventListener('submit', handleNickSubmit)
+nicknameForm.addEventListener('submit', handleNickSubmit);
 
 // Socket Code
 
