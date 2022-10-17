@@ -31,6 +31,7 @@ function publicRooms() {
 }
 
 wsServer.on('connection', (socket) => {
+  console.log(socket);
   socket['nickname'] = 'Anonymous';
   wsServer.emit('room_change', publicRooms());
   socket.on('room', (roomName, showRoom) => {
