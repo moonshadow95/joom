@@ -11,40 +11,53 @@ body
     header
         h1 Joom
     main
-        div#nickname
-            h3 Anonymous
-            form
-                input(placeholder='nickname' type='text' maxlength=12 required)
-                button Save
-        div#welcome
-            form
-                input(placeholder='room name' type='text' required)
-                button Enter room
-            div
-                h3 Open Rooms
-                ul#roomList
-        div#call
-            h3
-            div#streamGrid
-                div#myStream
-                    h4 You
-                    video#myFace(autoplay playsinline width="screen")
-                    div
-                        div#controls
-                            button#mute
-                                img(src="https://img.icons8.com/windows/32/ffffff/block-microphone.png")
-                            button#camera
-                                img(src="https://img.icons8.com/external-regular-kawalan-studio/24/ffffff/external-camera-off-user-interface-regular-kawalan-studio.png")
-                        select#cameras
-                div#peersStream
-                    video#peersFace(autoplay playsinline width="screen")
-        div#chat
-            ul
-            div
-                form#chatForm
-                    input(type="text" required)
-                    button#chatSub Send
+    div#welcome
+        form
+            input(placeholder="room name", required, type="text")
+            button Enter Room
+    div#room
+        h3
+        ul
+        form
+            input(placeholder="message", required, type="text")
+            button Send
+    script(src="/socket.io/socket.io.js") 
+    script(src="/public/app.js") 
+    //- main
+    //-     div#nickname
+    //-         h3 Anonymous
+    //-         form
+    //-             input(placeholder='nickname' type='text' maxlength=12 required)
+    //-             button Save
+    //-     div#welcome
+    //-         form
+    //-             input(placeholder='room name' type='text' required)
+    //-             button Enter room
+    //-         div
+    //-             h3 Open Rooms
+    //-             ul#roomList
+    //-     div#call
+    //-         h3
+    //-         div#streamGrid
+    //-             div#myStream
+    //-                 h4 You
+    //-                 video#myFace(autoplay playsinline width="screen")
+    //-                 div
+    //-                     div#controls
+    //-                         button#mute
+    //-                             img(src="https://img.icons8.com/windows/32/ffffff/block-microphone.png")
+    //-                         button#camera
+    //-                             img(src="https://img.icons8.com/external-regular-kawalan-studio/24/ffffff/external-camera-off-user-interface-regular-kawalan-studio.png")
+    //-                     select#cameras
+    //-             div#peersStream
+    //-                 video#peersFace(autoplay playsinline width="screen")
+    //-     div#chat
+    //-         ul
+    //-         div
+    //-             form#chatForm
+    //-                 input(type="text" required)
+    //-                 button#chatSub Send
 
 
-    script(src="/socket.io/socket.io.js")
-    script(src='/public/app.js')
+    //- script(src="/socket.io/socket.io.js")
+    //- script(src='/public/app.js')

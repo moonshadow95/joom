@@ -1,62 +1,30 @@
 import http from 'http';
+import SocketIO from 'socket.io';
 import express from 'express';
-import { Server } from 'socket.io';
-
-const port = 3000;
 const app = express();
-
 app.set('view engine', 'pug');
 app.set('views', __dirname + '/views');
-
 app.use('/public', express.static(__dirname + '/public'));
 app.get('/', (_, res) => res.render('home'));
 app.get('/*', (_, res) => res.redirect('/'));
-
 const httpServer = http.createServer(app);
-const wsServer = new Server(httpServer);
-
-function publicRooms() {
-  const {
-    sockets: {
-      adapter: { sids, rooms },
-    },
-  } = wsServer;
-  const publicRoomList = [];
-  rooms.forEach((_, key) => {
-    if (!sids.get(key)) {
-      publicRoomList.push(key);
-    }
-  });
-  return publicRoomList;
-}
-
+const wsServer = SocketIO(httpServer);
 wsServer.on('connection', (socket) => {
-  console.log(socket);
-  socket['nickname'] = 'Anonymous';
-  wsServer.emit('room_change', publicRooms());
-  socket.on('room', (roomName, showRoom) => {
+  socket.onAny((event) => {
+    console.log(`Socket Event: ${event}`);
+  });
+  socket.on('enter_room', (roomName, done) => {
     socket.join(roomName);
-    showRoom(roomName);
-    socket.to(roomName).emit('welcome', socket.nickname, roomName);
-    wsServer.sockets.emit('room_change', publicRooms());
+    done();
+    socket.to(roomName).emit('welcome');
   });
-  socket.on('join_room', (roomName) => {
-    socket.join(roomName);
-    socket.to(roomName).emit('welcome', socket.nickname, roomName);
+  socket.on('disconnecting', () => {
+    socket.rooms.forEach((room) => socket.to(room).emit('bye'));
   });
-  socket.on('offer', (offer, roomName) => {
-    socket.to(roomName).emit('offer', offer);
+  socket.on('new_message', (msg, room, done) => {
+    socket.to(room).emit('new_message', msg);
+    done();
   });
-  socket.on('answer', (answer, roomName) => {
-    socket.to(roomName).emit('answer', answer);
-  });
-  socket.on('ice', (ice, roomName) => {
-    socket.to(roomName).emit('ice', ice);
-  });
-  socket.on('nickname', (nickname) => (socket['nickname'] = nickname));
 });
-
-const handleListening = () =>
-  console.log(`✅ Listening on http://localhost:${port}`);
-
-httpServer.listen(3000, handleListening);
+const handleListen = () => console.log(`Listening on http://localhost:3000`);
+httpServer.listen(3000, handleListen);
